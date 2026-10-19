@@ -74,7 +74,7 @@
           <div><div class="helper" style="font-weight:700;color:var(--ink);margin-bottom:8px">Sticker sheet</div><div class="paper-picks"><button class="active" data-background="white">White<small>Opaque sticker paper</small></button><button data-background="clear">Clear<small>Transparent export</small></button></div></div>
           <div><div class="helper" style="font-weight:700;color:var(--ink);margin-bottom:8px">Print quality</div><div class="paper-picks"><button data-print-dpi="300">Standard<small>300 DPI · smaller file</small></button><button class="active" data-print-dpi="600">Extra crisp<small>600 DPI · best detail</small></button></div></div>
           <button class="btn toggle-row" id="cutOutline" type="button" aria-pressed="true"><span>Cut outline around each wrap</span><span class="toggle-state">On</span></button>
-          <dl class="specs"><div class="spec"><dt>Resolution</dt><dd id="resolutionSpec">600 DPI</dd></div><div class="spec"><dt>Source</dt><dd>Full-resolution original</dd></div><div class="spec"><dt>Cutting gap</dt><dd>3 mm</dd></div><div class="spec"><dt>Printing</dt><dd>100% / actual size</dd></div></dl>
+          <dl class="specs"><div class="spec"><dt>Resolution</dt><dd id="resolutionSpec">600 DPI</dd></div><div class="spec"><dt>Source</dt><dd>Full-resolution original</dd></div><div class="spec"><dt>Edge bleed</dt><dd>1 mm per side</dd></div><div class="spec"><dt>Cutting gap</dt><dd>3 mm</dd></div><div class="spec"><dt>Printing</dt><dd>100% / actual size</dd></div></dl>
           <button class="btn" id="repack">Repack in set order</button><button class="btn primary" id="downloadSheet">Download extra-crisp PNG</button><div class="status" id="status"></div>
           <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m-4-4 4 4 4-4M5 21h14"/></svg><span>Print on sticker paper at 100% or Actual Size with the printer’s highest quality setting. Do not use Fit to Page, or the wraps will come out the wrong size.</span></div>
         </div>
@@ -89,6 +89,9 @@
 (function(){
 'use strict';
 function szList(list){return list.map(function(s,i){return{n:i,w:s[0],l:s[1]}})}
+var BLEED=1; /* mm added on every side so each wrap overlaps the nail edge */
+function wrapW(wr){return wr.w+BLEED*2}
+function wrapL(wr){return wr.l+BLEED*2}
 var STYLES={
   almondShort:{label:'Almond Short',shape:'almond',sizes:szList([[13.5,22],[12.5,21],[11.5,21],[11,20.5],[10.5,20],[10,19.5],[9.5,19.5],[9,18.5],[9,17.5],[8,17.5],[8,16.5],[7,16.5]])},
   almondMedium:{label:'Almond Medium',shape:'almond',sizes:szList([[13.6,26],[12.6,25.8],[11.5,25.5],[10.8,24.5],[10.3,23.8],[10,23],[9.7,22.5],[9.2,21.3],[8.7,21],[8.2,20.5],[7.8,19],[7,18.5]])},
@@ -164,7 +167,7 @@ function paintWrap(ctx,wr,w,h,stroke){
   if(stroke){ctx.save();wrapPath(ctx,w,h,STYLES[wr.style].shape);ctx.strokeStyle='rgba(60,50,45,.5)';ctx.lineWidth=Math.max(1,Math.min(w,h)/60);ctx.stroke();ctx.restore()}
 }
 function wrapCanvas(wr,dpi,stroke){
-  var w=Math.max(2,Math.round(wr.w/25.4*dpi)),h=Math.max(2,Math.round(wr.l/25.4*dpi));
+  var w=Math.max(2,Math.round(wrapW(wr)/25.4*dpi)),h=Math.max(2,Math.round(wrapL(wr)/25.4*dpi));
   var c=document.createElement('canvas');c.width=w;c.height=h;
   paintWrap(c.getContext('2d'),wr,w,h,stroke);
   return c;
@@ -189,7 +192,7 @@ function renderSet(){
     b.className='wrap-tile'+(wr.id===state.selectedId?' selected':'')+(wr.source?'':' empty');
     b.setAttribute('aria-label','Edit wrap '+(i+1)+', '+STYLES[wr.style].label+' size '+wr.size+', '+fmtW(wr.w)+' by '+fmtW(wr.l)+' millimeters'+(wr.source?', photo added':', no photo'));
     var c=wrapCanvas(wr,170,false);
-    c.style.width=(wr.w*pxmm)+'px';c.style.height=(wr.l*pxmm)+'px';
+    c.style.width=(wrapW(wr)*pxmm)+'px';c.style.height=(wrapL(wr)*pxmm)+'px';
     var label=document.createElement('span');label.className='tile-label';label.textContent='Size '+wr.size;
     var num=document.createElement('span');num.className='tile-num';num.textContent=fmtW(wr.w)+' × '+fmtW(wr.l)+' mm';
     b.appendChild(c);b.appendChild(label);b.appendChild(num);
@@ -229,11 +232,11 @@ function drawPreview(){
   var holder=$('#wrapPreview'),canvas=$('#previewCanvas');
   var shell=holder.parentElement;
   var dispH=Math.min(460,Math.max(280,window.innerHeight*.58));
-  var dispW=dispH*wr.w/wr.l;
+  var dispW=dispH*wrapW(wr)/wrapL(wr);
   var maxW=Math.max(120,shell.clientWidth-32);
-  if(dispW>maxW){dispW=maxW;dispH=dispW*wr.l/wr.w}
+  if(dispW>maxW){dispW=maxW;dispH=dispW*wrapL(wr)/wrapW(wr)}
   holder.style.width=dispW+'px';holder.style.height=dispH+'px';
-  var res=14;canvas.width=Math.round(wr.w*res);canvas.height=Math.round(wr.l*res);
+  var res=14;canvas.width=Math.round(wrapW(wr)*res);canvas.height=Math.round(wrapL(wr)*res);
   canvas.style.width=dispW+'px';canvas.style.height=dispH+'px';
   paintWrap(canvas.getContext('2d'),wr,canvas.width,canvas.height,true);
   $('#emptyArt').classList.toggle('hidden',!!wr.source);
@@ -306,8 +309,8 @@ function printable(){return wraps.filter(function(w){return !!w.source})}
 function pack(){
   var x=10,y=10,gap=3,inRow=0,rowH=0,d=paperDims();
   printable().forEach(function(wr){
-    if(inRow>=8||x+wr.w>d.w-10){x=10;y+=rowH+gap;inRow=0;rowH=0}
-    wr.layoutX=x;wr.layoutY=y;x+=wr.w+gap;inRow++;rowH=Math.max(rowH,wr.l);
+    if(inRow>=8||x+wrapW(wr)>d.w-10){x=10;y+=rowH+gap;inRow=0;rowH=0}
+    wr.layoutX=x;wr.layoutY=y;x+=wrapW(wr)+gap;inRow++;rowH=Math.max(rowH,wrapL(wr));
   });
 }
 function buildLayout(keep){
@@ -324,7 +327,7 @@ function buildLayout(keep){
     wr.previewUrl=wrapCanvas(wr,300,state.cutOutline).toDataURL('image/png');
     var item=document.createElement('div');item.className='sheet-item';item.dataset.wrap=wr.id;
     item.style.left=(wr.layoutX*scale)+'px';item.style.top=(wr.layoutY*scale)+'px';
-    item.style.width=(wr.w*scale)+'px';item.style.height=(wr.l*scale)+'px';
+    item.style.width=(wrapW(wr)*scale)+'px';item.style.height=(wrapL(wr)*scale)+'px';
     item.innerHTML='<img draggable="false" alt="Wrap '+wrapIndex(wr)+', '+STYLES[wr.style].label+' size '+wr.size+', '+fmtW(wr.w)+' by '+fmtW(wr.l)+' millimeters" src="'+wr.previewUrl+'">';
     makeDraggable(item,wr);paper.appendChild(item);
   });
@@ -333,7 +336,7 @@ function makeDraggable(el,wr){
   var drag=null;
   function finishDrag(e){if(!drag||e.pointerId!==drag.id)return;el.style.left=(wr.layoutX*state.paperScale)+'px';el.style.top=(wr.layoutY*state.paperScale)+'px';el.style.transform='';el.classList.remove('dragging');drag=null}
   el.addEventListener('pointerdown',function(e){e.preventDefault();el.setPointerCapture(e.pointerId);drag={id:e.pointerId,x:e.clientX,y:e.clientY,l:wr.layoutX,t:wr.layoutY};el.classList.add('dragging')});
-  el.addEventListener('pointermove',function(e){if(!drag||e.pointerId!==drag.id)return;e.preventDefault();var d=paperDims();wr.layoutX=Math.max(0,Math.min(d.w-wr.w,drag.l+(e.clientX-drag.x)/state.paperScale));wr.layoutY=Math.max(0,Math.min(d.h-wr.l,drag.t+(e.clientY-drag.y)/state.paperScale));el.style.transform='translate3d('+((wr.layoutX-drag.l)*state.paperScale)+'px,'+((wr.layoutY-drag.t)*state.paperScale)+'px,0)'});
+  el.addEventListener('pointermove',function(e){if(!drag||e.pointerId!==drag.id)return;e.preventDefault();var d=paperDims();wr.layoutX=Math.max(0,Math.min(d.w-wrapW(wr),drag.l+(e.clientX-drag.x)/state.paperScale));wr.layoutY=Math.max(0,Math.min(d.h-wrapL(wr),drag.t+(e.clientY-drag.y)/state.paperScale));el.style.transform='translate3d('+((wr.layoutX-drag.l)*state.paperScale)+'px,'+((wr.layoutY-drag.t)*state.paperScale)+'px,0)'});
   el.addEventListener('pointerup',finishDrag);el.addEventListener('pointercancel',finishDrag);el.addEventListener('lostpointercapture',finishDrag);
 }
 $$('[data-paper-size]').forEach(function(b){b.addEventListener('click',function(){state.paperSize=b.dataset.paperSize;$$('[data-paper-size]').forEach(function(x){x.classList.toggle('active',x===b)});buildLayout(false)})});
