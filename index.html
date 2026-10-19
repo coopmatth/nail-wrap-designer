@@ -32,21 +32,21 @@
   </nav>
   <section class="workspace">
     <article class="screen active" id="setScreen">
-      <div class="head"><div><div class="eyebrow">Your wrap set</div><h2>Standard full-cover sizes</h2><p>Every wrap is 24 mm long, in the six standard widths. The set starts with two of each width pattern — sixteen wraps, both hands covered. Tap any wrap to fit a photo to it.</p></div><div class="pill" id="setCount">16 wraps</div></div>
+      <div class="head"><div><div class="eyebrow">Your wrap set</div><h2>Standard full-cover sizes</h2><p>Every wrap is 26 mm long, in the six standard widths. The set starts with two of each width pattern — sixteen wraps, both hands covered. Tap any wrap to fit a photo to it.</p></div><div class="pill" id="setCount">16 wraps</div></div>
       <div class="set-sheet">
         <div class="wrap-grid" id="wrapGrid"></div>
         <div class="empty-set hidden" id="emptySet"><b>No wraps in the set</b>Add a wrap or a full set of sixteen to get started.</div>
         <div class="set-tools"><button class="btn" id="addWrap" type="button">+ Add wrap</button><button class="btn" id="addSet" type="button">+ Add full set of 16</button></div>
       </div>
-      <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 10v6m0-9h.01"/></svg><span>Widths run 16 · 13.8 · 12.5 · 12.5 · 11.5 · 11.5 · 10.5 · 8.5 mm, all 24 mm long — the standard full-cover sticker sizes. The photo covers the entire wrap, edge to edge.</span></div>
+      <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 10v6m0-9h.01"/></svg><span>Widths run 16 · 13.8 · 12.5 · 12.5 · 11.5 · 11.5 · 10.5 · 8.5 mm, all 26 mm long — the standard full-cover sticker sizes. The photo covers the entire wrap, edge to edge.</span></div>
       <div class="actions"><span class="helper">Wraps without a photo stay off the print sheet.</span><button class="btn primary" id="doneSet">Arrange the sheet →</button></div>
     </article>
 
     <article class="screen" id="editScreen">
-      <div class="head"><div><div class="eyebrow">Wrap editor</div><h2 id="editTitle">Wrap 1</h2><p>The photo fills the whole wrap — no borders, no polish showing. Drag it on the wrap to choose which part of the photo shows, and zoom until it covers corner to corner.</p></div><div class="pill" id="editPill">16 × 24 mm</div></div>
+      <div class="head"><div><div class="eyebrow">Wrap editor</div><h2 id="editTitle">Wrap 1</h2><p>The photo fills the whole wrap — no borders, no polish showing. Drag it on the wrap to choose which part of the photo shows, and zoom until it covers corner to corner.</p></div><div class="pill" id="editPill">16 × 26 mm</div></div>
       <div class="editor-layout">
         <div class="controls">
-          <div><div class="helper" style="font-weight:700;color:var(--ink);margin-bottom:8px">Wrap width · all 24 mm long</div><div class="size-grid" id="sizeGrid"></div></div>
+          <div><div class="helper" style="font-weight:700;color:var(--ink);margin-bottom:8px">Wrap width · all 26 mm long</div><div class="size-grid" id="sizeGrid"></div></div>
           <label class="upload"><input id="artInput" type="file" accept="image/*"><b>Choose a photo</b><span>Uses the full-resolution original; it will cover the entire wrap</span></label>
           <div class="control"><label for="zoom">Photo zoom <output id="zoomOut">100%</output></label><input id="zoom" type="range" min="50" max="400" value="100"></div>
           <div class="adjust"><button class="btn" id="smaller">− Smaller</button><button class="btn" id="center">Center</button><button class="btn" id="larger">+ Larger</button><button class="btn" id="left">↶ Rotate</button><button class="btn" id="reset">Reset fit</button><button class="btn" id="right">Rotate ↷</button></div>
@@ -81,7 +81,7 @@
 <script>
 (function(){
 'use strict';
-var LENGTH=24;
+var LENGTH=26;
 var WIDTHS=[16,13.8,12.5,11.5,10.5,8.5];
 var SET_PATTERN=[16,13.8,12.5,12.5,11.5,11.5,10.5,8.5];
 var nextId=1;
@@ -135,7 +135,7 @@ function renderSet(){
   wraps.forEach(function(wr,i){
     var b=document.createElement('button');b.type='button';
     b.className='wrap-tile'+(wr.id===state.selectedId?' selected':'')+(wr.source?'':' empty');
-    b.setAttribute('aria-label','Edit wrap '+(i+1)+', '+fmtW(wr.w)+' by 24 millimeters'+(wr.source?', photo added':', no photo'));
+    b.setAttribute('aria-label','Edit wrap '+(i+1)+', '+fmtW(wr.w)+' by 26 millimeters'+(wr.source?', photo added':', no photo'));
     var c=wrapCanvas(wr,170,false);
     c.style.width=(wr.w*pxmm)+'px';c.style.height=(LENGTH*pxmm)+'px';
     var label=document.createElement('span');label.className='tile-label';label.textContent=fmtW(wr.w)+' mm';
@@ -148,17 +148,17 @@ function renderSet(){
   var pc=photoCount();
   $('#setCount').textContent=wraps.length+' wrap'+(wraps.length===1?'':'s')+' · '+pc+' with photo'+(pc===1?'':'s');
 }
-$('#addWrap').addEventListener('click',function(){var wr=makeWrap(12.5);wraps.push(wr);state.selectedId=wr.id;renderSet();showToast('Wrap added — 12.5 × 24 mm');go('edit')});
+$('#addWrap').addEventListener('click',function(){var wr=makeWrap(12.5);wraps.push(wr);state.selectedId=wr.id;renderSet();showToast('Wrap added — 12.5 × 26 mm');go('edit')});
 $('#addSet').addEventListener('click',function(){SET_PATTERN.concat(SET_PATTERN).forEach(function(w){wraps.push(makeWrap(w))});renderSet();showToast('Full set of 16 added — '+wraps.length+' wraps total')});
 $('#doneSet').addEventListener('click',function(){go('layout')});
 /* ---------- Step 2: the editor ---------- */
 var sizeGrid=$('#sizeGrid');
-WIDTHS.forEach(function(w){var b=document.createElement('button');b.type='button';b.className='size';b.dataset.width=w;b.innerHTML='<strong>'+fmtW(w)+'</strong><small>mm wide × 24</small>';b.addEventListener('click',function(){var wr=selected();if(!wr)return;wr.w=w;updateEditorLabels();drawPreview()});sizeGrid.appendChild(b)});
+WIDTHS.forEach(function(w){var b=document.createElement('button');b.type='button';b.className='size';b.dataset.width=w;b.innerHTML='<strong>'+fmtW(w)+'</strong><small>mm wide × 26</small>';b.addEventListener('click',function(){var wr=selected();if(!wr)return;wr.w=w;updateEditorLabels();drawPreview()});sizeGrid.appendChild(b)});
 function wrapIndex(wr){return wraps.indexOf(wr)+1}
 function updateEditorLabels(){
   var wr=selected();if(!wr)return;
   $('#editTitle').textContent='Wrap '+wrapIndex(wr);
-  $('#editPill').textContent=fmtW(wr.w)+' × 24 mm';
+  $('#editPill').textContent=fmtW(wr.w)+' × 26 mm';
   $$('.size').forEach(function(b){b.classList.toggle('selected',+b.dataset.width===wr.w)});
   $('#zoom').value=Math.round(wr.scale*100);
   $('#zoomOut').textContent=Math.round(wr.scale*100)+'%';
@@ -264,7 +264,7 @@ function buildLayout(keep){
     var item=document.createElement('div');item.className='sheet-item';item.dataset.wrap=wr.id;
     item.style.left=(wr.layoutX*scale)+'px';item.style.top=(wr.layoutY*scale)+'px';
     item.style.width=(wr.w*scale)+'px';item.style.height=(LENGTH*scale)+'px';
-    item.innerHTML='<img draggable="false" alt="Wrap '+wrapIndex(wr)+', '+fmtW(wr.w)+' by 24 millimeters" src="'+wr.previewUrl+'">';
+    item.innerHTML='<img draggable="false" alt="Wrap '+wrapIndex(wr)+', '+fmtW(wr.w)+' by 26 millimeters" src="'+wr.previewUrl+'">';
     makeDraggable(item,wr);paper.appendChild(item);
   });
 }
