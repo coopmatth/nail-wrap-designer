@@ -32,13 +32,13 @@
   </nav>
   <section class="workspace">
     <article class="screen active" id="setScreen">
-      <div class="head"><div><div class="eyebrow">Your wrap set</div><h2>Standard full-cover sizes</h2><p>Every wrap is 26 mm long, in the six standard widths. The set starts with one of each size in the pattern — eight wraps. Tap any wrap to fit a photo to it.</p></div><div class="pill" id="setCount">8 wraps</div></div>
+      <div class="head"><div><div class="eyebrow">Your wrap set</div><h2>Standard full-cover sizes</h2><p>Every wrap is 26 mm long, in the six standard widths. The set starts with one of each size — six wraps. Tap any wrap to fit a photo to it.</p></div><div class="pill" id="setCount">6 wraps</div></div>
       <div class="set-sheet">
         <div class="wrap-grid" id="wrapGrid"></div>
-        <div class="empty-set hidden" id="emptySet"><b>No wraps in the set</b>Add a wrap or a full set of eight to get started.</div>
-        <div class="set-tools"><button class="btn" id="addWrap" type="button">+ Add wrap</button><button class="btn" id="addSet" type="button">+ Add full set of 8</button></div>
+        <div class="empty-set hidden" id="emptySet"><b>No wraps in the set</b>Add a wrap or a full set of six to get started.</div>
+        <div class="set-tools"><button class="btn" id="addWrap" type="button">+ Add wrap</button><button class="btn" id="addSet" type="button">+ Add full set of 6</button></div>
       </div>
-      <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 10v6m0-9h.01"/></svg><span>Widths run 16 · 13.8 · 12.5 · 12.5 · 11.5 · 11.5 · 10.5 · 8.5 mm, all 26 mm long — the standard full-cover sticker sizes. The photo covers the entire wrap, edge to edge.</span></div>
+      <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 10v6m0-9h.01"/></svg><span>Widths run 16 · 13.8 · 12.5 · 11.5 · 10.5 · 8.5 mm, all 26 mm long — the standard full-cover sticker sizes. The photo covers the entire wrap, edge to edge.</span></div>
       <div class="actions"><span class="helper">Wraps without a photo stay off the print sheet.</span><button class="btn primary" id="doneSet">Arrange the sheet →</button></div>
     </article>
 
@@ -83,7 +83,7 @@
 'use strict';
 var LENGTH=26;
 var WIDTHS=[16,13.8,12.5,11.5,10.5,8.5];
-var SET_PATTERN=[16,13.8,12.5,12.5,11.5,11.5,10.5,8.5];
+var SET_PATTERN=[16,13.8,12.5,11.5,10.5,8.5];
 var nextId=1;
 function makeWrap(w){return{id:nextId++,w:w,source:null,sourceUrl:'',scale:1,rotation:0,x:0,y:0,flip:false,layoutX:0,layoutY:0,previewUrl:''}}
 var wraps=[];SET_PATTERN.forEach(function(w){wraps.push(makeWrap(w))});
@@ -149,7 +149,7 @@ function renderSet(){
   $('#setCount').textContent=wraps.length+' wrap'+(wraps.length===1?'':'s')+' · '+pc+' with photo'+(pc===1?'':'s');
 }
 $('#addWrap').addEventListener('click',function(){var wr=makeWrap(12.5);wraps.push(wr);state.selectedId=wr.id;renderSet();showToast('Wrap added — 12.5 × 26 mm');go('edit')});
-$('#addSet').addEventListener('click',function(){SET_PATTERN.forEach(function(w){wraps.push(makeWrap(w))});renderSet();showToast('Full set of 8 added — '+wraps.length+' wraps total')});
+$('#addSet').addEventListener('click',function(){SET_PATTERN.forEach(function(w){wraps.push(makeWrap(w))});renderSet();showToast('Full set of 6 added — '+wraps.length+' wraps total')});
 $('#doneSet').addEventListener('click',function(){go('layout')});
 /* ---------- Step 2: the editor ---------- */
 var sizeGrid=$('#sizeGrid');
