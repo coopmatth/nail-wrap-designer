@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:,">
+<title>Nail Wrap Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,650&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:#f7f3ef;--surface:#fffdfb;--surface2:#efe9e3;--ink:#251f1d;--muted:#6d625d;--line:#d8cec7;--accent:#d94d3f;--accent2:#a9342b;--soft:#f7d8d2;--good:#26745a;--shadow:0 12px 32px rgba(70,45,34,.12);--radius:20px}
+@media(prefers-color-scheme:dark){:root{--bg:#171311;--surface:#211c19;--surface2:#2d2622;--ink:#fbf4ef;--muted:#b9aca5;--line:#453b36;--accent:#ff7869;--accent2:#ff9b8e;--soft:#4a2723;--good:#71c7a6;--shadow:0 14px 34px rgba(0,0,0,.34)}}
+*{box-sizing:border-box}html{background:var(--bg);-webkit-text-size-adjust:100%}body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:"DM Sans",sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 42%,transparent);outline-offset:2px}.app{width:min(1160px,100%);margin:auto;padding:18px 16px 42px}.intro{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:6px 0 18px}.intro h1{font:650 clamp(32px,5vw,52px)/.98 "Newsreader",serif;letter-spacing:-.035em;margin:0;max-width:650px}.intro p{max-width:390px;margin:0;text-align:right;color:var(--muted);font-size:14px;line-height:1.5}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px}.step{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:11px;padding:10px 12px;text-align:left;font-weight:700;box-shadow:0 4px 12px rgba(70,45,34,.06)}.step span{display:inline-grid;place-items:center;width:25px;height:25px;margin-right:8px;border-radius:50%;background:var(--surface2);font-size:12px}.step.active{border-color:var(--accent);color:var(--ink)}.step.active span{background:var(--accent);color:#fff}.step.done span{background:var(--good);color:#fff}.workspace{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.screen{display:none;padding:clamp(18px,4vw,36px)}.screen.active{display:block}.head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:22px}.eyebrow{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}h2{font:650 clamp(28px,4vw,40px)/1 "Newsreader",serif;letter-spacing:-.025em;margin:0 0 7px}.head p,.helper{color:var(--muted);font-size:14px;line-height:1.5;margin:0;max-width:650px}.pill{white-space:nowrap;background:var(--soft);color:var(--accent2);font-weight:700;font-size:13px;border-radius:999px;padding:9px 12px}.btn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:11px;padding:11px 16px;min-height:44px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:7px;text-decoration:none}.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.btn.primary:hover{background:var(--accent2)}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.danger{color:var(--accent2)}.actions{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--line);margin-top:24px;padding-top:18px}.note{display:flex;gap:10px;background:var(--surface2);border-radius:9px;padding:12px 14px;margin-top:14px;color:var(--muted);font-size:13px;line-height:1.45}.note svg{flex:0 0 18px;color:var(--accent)}.hidden{display:none!important}
+.set-sheet{background:var(--surface2);border-radius:16px;padding:20px 16px 16px}.wrap-grid{display:flex;flex-wrap:wrap;gap:14px 10px;justify-content:center;align-items:flex-end;min-height:120px}.wrap-tile{appearance:none;border:0;background:transparent;padding:4px 2px 0;border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--muted)}.wrap-tile canvas{display:block;filter:drop-shadow(0 3px 6px rgba(56,31,22,.18))}.wrap-tile .tile-label{font-size:11px;font-weight:700}.wrap-tile .tile-num{font-size:10px;color:var(--muted)}.wrap-tile.selected{box-shadow:inset 0 0 0 2px var(--accent);background:var(--soft);color:var(--accent2)}.wrap-tile.empty canvas{opacity:.9}.set-tools{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:18px}.set-tools .btn{background:var(--surface);font-size:13px;min-height:40px;padding:8px 13px}.empty-set{color:var(--muted);text-align:center;max-width:320px;margin:auto;padding:22px 0}.empty-set b{display:block;color:var(--ink);margin-bottom:5px}
+.editor-layout{display:grid;grid-template-columns:minmax(280px,.82fr) minmax(330px,1.18fr);gap:24px}.controls{display:flex;flex-direction:column;gap:15px}.size-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.size{appearance:none;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 4px;text-align:center}.size strong{display:block;font:650 23px/1 "Newsreader",serif}.size small{display:block;margin-top:5px;color:var(--muted);font-size:10px}.size.selected{border:2px solid var(--accent);background:var(--soft);padding:9px 3px}.upload{position:relative;border:1.5px dashed var(--line);background:var(--bg);border-radius:13px;padding:18px;text-align:center}.upload input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.upload b{display:block;margin-bottom:3px}.upload span{color:var(--muted);font-size:12px}.control label{display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:700;margin-bottom:7px}.control output{color:var(--accent)}input[type=range]{width:100%;accent-color:var(--accent)}.adjust{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.adjust .btn{font-size:12px;padding:8px}.micro{display:flex;gap:8px;flex-wrap:wrap}.micro .btn{font-size:12px;min-height:38px;padding:8px 11px}.preview-shell{background:var(--surface2);border-radius:15px;padding:16px;display:grid;place-items:center;min-height:535px}.wrap-preview{position:relative;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:contain}.wrap-preview canvas{display:block;filter:drop-shadow(0 10px 22px rgba(67,38,24,.16))}.empty-art{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px;color:#71574e;pointer-events:none}.empty-art b{display:block;color:#5a3f36;margin-bottom:4px;font-size:14px}.empty-art span{font-size:12px;line-height:1.45}
+.layout-grid{display:grid;grid-template-columns:minmax(250px,.72fr) minmax(360px,1.28fr);gap:28px;align-items:start}.settings{display:flex;flex-direction:column;gap:16px}.paper-picks{display:grid;grid-template-columns:1fr 1fr;gap:8px}.paper-picks button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:11px;padding:12px;text-align:left;font-weight:700}.paper-picks button.active{border:2px solid var(--accent);padding:11px;background:var(--soft)}.paper-picks small{display:block;color:var(--muted);font-weight:500;margin-top:2px}.toggle-row{width:100%;justify-content:space-between;text-align:left}.toggle-row[aria-pressed="true"]{border-color:var(--accent);background:var(--soft);color:var(--accent2)}.toggle-row .toggle-state{font-size:12px}.specs{margin:0;border-top:1px solid var(--line)}.spec{display:flex;justify-content:space-between;gap:15px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}.spec dt{color:var(--muted)}.spec dd{margin:0;font-weight:700}.paper-wrap{background:var(--surface2);border-radius:15px;padding:18px;display:grid;place-items:center;min-height:620px}.paper{position:relative;background-image:linear-gradient(rgba(90,75,66,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(90,75,66,.08) 1px,transparent 1px);background-size:10mm 10mm;background-color:#fff;box-shadow:0 12px 28px rgba(43,30,24,.18);overflow:hidden;touch-action:none}.sheet-item{position:absolute;touch-action:none;cursor:grab;will-change:transform;-webkit-user-select:none;user-select:none}.sheet-item.dragging{cursor:grabbing;z-index:3}.sheet-item img{display:block;width:100%;height:100%;pointer-events:none;-webkit-user-drag:none;-webkit-user-select:none;user-select:none}.empty-layout{color:var(--muted);text-align:center;max-width:290px}.empty-layout b{display:block;color:var(--ink);margin-bottom:5px}.status{font-size:12px;color:var(--good);min-height:18px;text-align:center}.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,120px);background:var(--ink);color:var(--surface);padding:11px 16px;border-radius:999px;box-shadow:var(--shadow);font-size:13px;font-weight:700;z-index:40;transition:transform .25s;max-width:calc(100% - 30px);text-align:center}.toast.show{transform:translate(-50%,0)}
+@media(max-width:780px){.app{padding:11px 9px 28px}.intro{margin:7px 6px 14px}.intro p{display:none}.steps{position:sticky;top:0;z-index:20;background:var(--bg);padding:5px 0 8px}.step{text-align:center;padding:8px 5px}.step span{margin:0}.step b{display:none}.workspace{border-radius:17px}.screen{padding:20px 14px}.head{display:block}.pill{display:inline-block;margin-top:9px}.editor-layout,.layout-grid{grid-template-columns:1fr}.preview-shell{min-height:420px}.actions{position:sticky;bottom:0;background:var(--surface);margin-left:-14px;margin-right:-14px;padding:13px 14px calc(7px + env(safe-area-inset-bottom));z-index:10}.actions .btn{flex:1}.paper-wrap{min-height:480px;padding:10px}.layout-grid .settings{order:2}.layout-grid .paper-wrap{order:1}.size-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:430px){.adjust{grid-template-columns:1fr 1fr}.adjust .btn:nth-child(3){grid-column:1/-1}.paper-picks{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="intro"><h1>One photo, wrapped around the whole nail.</h1><p>Fit a photo across full-cover nail wraps in the standard sticker sizes, arrange the set on a sheet, and print true-size on sticker paper.</p></header>
+  <nav class="steps" aria-label="Design steps">
+    <button class="step active" data-go="set"><span>1</span><b>Design set</b></button>
+    <button class="step" data-go="edit"><span>2</span><b>Fit photo</b></button>
+    <button class="step" data-go="layout"><span>3</span><b>Print layout</b></button>
+  </nav>
+  <section class="workspace">
+    <article class="screen active" id="setScreen">
+      <div class="head"><div><div class="eyebrow">Your wrap set</div><h2>Standard full-cover sizes</h2><p>Every wrap is 24 mm long, in the six standard widths. The set starts with two of each width pattern — sixteen wraps, both hands covered. Tap any wrap to fit a photo to it.</p></div><div class="pill" id="setCount">16 wraps</div></div>
+      <div class="set-sheet">
+        <div class="wrap-grid" id="wrapGrid"></div>
+        <div class="empty-set hidden" id="emptySet"><b>No wraps in the set</b>Add a wrap or a full set of sixteen to get started.</div>
+        <div class="set-tools"><button class="btn" id="addWrap" type="button">+ Add wrap</button><button class="btn" id="addSet" type="button">+ Add full set of 16</button></div>
+      </div>
+      <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 10v6m0-9h.01"/></svg><span>Widths run 16 · 13.8 · 12.5 · 12.5 · 11.5 · 11.5 · 10.5 · 8.5 mm, all 24 mm long — the standard full-cover sticker sizes. The photo covers the entire wrap, edge to edge.</span></div>
+      <div class="actions"><span class="helper">Wraps without a photo stay off the print sheet.</span><button class="btn primary" id="doneSet">Arrange the sheet →</button></div>
+    </article>
+
+    <article class="screen" id="editScreen">
+      <div class="head"><div><div class="eyebrow">Wrap editor</div><h2 id="editTitle">Wrap 1</h2><p>The photo fills the whole wrap — no borders, no polish showing. Drag it on the wrap to choose which part of the photo shows, and zoom until it covers corner to corner.</p></div><div class="pill" id="editPill">16 × 24 mm</div></div>
+      <div class="editor-layout">
+        <div class="controls">
+          <div><div class="helper" style="font-weight:700;color:var(--ink);margin-bottom:8px">Wrap width · all 24 mm long</div><div class="size-grid" id="sizeGrid"></div></div>
+          <label class="upload"><input id="artInput" type="file" accept="image/*"><b>Choose a photo</b><span>Uses the full-resolution original; it will cover the entire wrap</span></label>
+          <div class="control"><label for="zoom">Photo zoom <output id="zoomOut">100%</output></label><input id="zoom" type="range" min="50" max="400" value="100"></div>
+          <div class="adjust"><button class="btn" id="smaller">− Smaller</button><button class="btn" id="center">Center</button><button class="btn" id="larger">+ Larger</button><button class="btn" id="left">↶ Rotate</button><button class="btn" id="reset">Reset fit</button><button class="btn" id="right">Rotate ↷</button></div>
+          <div class="micro"><button class="btn" id="flip" type="button">Flip photo</button><button class="btn" id="applyAll" type="button">Copy photo &amp; fit to every wrap</button></div>
+          <div class="micro"><button class="btn" id="duplicate" type="button">Duplicate wrap</button><button class="btn" id="clearPhoto" type="button">Clear photo</button><button class="btn danger" id="removeWrap" type="button">Remove wrap</button></div>
+          <p class="helper" id="fitHint">The photo auto-fills the wrap without stretching. Drag it on the wrap to reposition; pinch and twist on touchscreens to resize and rotate.</p>
+        </div>
+        <div class="preview-shell"><div class="wrap-preview" id="wrapPreview"><canvas id="previewCanvas" aria-label="Photo fitted to the selected wrap"></canvas><div class="empty-art" id="emptyArt"><span><b>No photo yet</b>Choose a photo and it will cover this whole wrap.</span></div></div></div>
+      </div>
+      <div class="actions"><button class="btn" id="backSet">← Back to set</button><button class="btn primary" id="saveWrap">Save wrap →</button></div>
+    </article>
+
+    <article class="screen" id="layoutScreen">
+      <div class="head"><div><div class="eyebrow">Print layout</div><h2>Arrange the sheet</h2><p>Wraps start in the standard two-rows-of-eight set arrangement. Drag any wrap to an unused area of a partially used sticker sheet.</p></div><div class="pill" id="layoutCount">0 wraps</div></div>
+      <div class="layout-grid">
+        <div class="settings">
+          <div><div class="helper" style="font-weight:700;color:var(--ink);margin-bottom:8px">Paper size</div><div class="paper-picks"><button class="active" data-paper-size="letter">US Letter<small>8.5 × 11 in</small></button><button data-paper-size="a4">A4<small>210 × 297 mm</small></button></div></div>
+          <div><div class="helper" style="font-weight:700;color:var(--ink);margin-bottom:8px">Sticker sheet</div><div class="paper-picks"><button class="active" data-background="white">White<small>Opaque sticker paper</small></button><button data-background="clear">Clear<small>Transparent export</small></button></div></div>
+          <div><div class="helper" style="font-weight:700;color:var(--ink);margin-bottom:8px">Print quality</div><div class="paper-picks"><button data-print-dpi="300">Standard<small>300 DPI · smaller file</small></button><button class="active" data-print-dpi="600">Extra crisp<small>600 DPI · best detail</small></button></div></div>
+          <button class="btn toggle-row" id="cutOutline" type="button" aria-pressed="true"><span>Cut outline around each wrap</span><span class="toggle-state">On</span></button>
+          <dl class="specs"><div class="spec"><dt>Resolution</dt><dd id="resolutionSpec">600 DPI</dd></div><div class="spec"><dt>Source</dt><dd>Full-resolution original</dd></div><div class="spec"><dt>Cutting gap</dt><dd>3 mm</dd></div><div class="spec"><dt>Printing</dt><dd>100% / actual size</dd></div></dl>
+          <button class="btn" id="repack">Repack in set order</button><button class="btn primary" id="downloadSheet">Download extra-crisp PNG</button><div class="status" id="status"></div>
+          <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m-4-4 4 4 4-4M5 21h14"/></svg><span>Print on sticker paper at 100% or Actual Size with the printer’s highest quality setting. Do not use Fit to Page, or the wraps will come out the wrong size.</span></div>
+        </div>
+        <div class="paper-wrap"><div class="paper" id="paper"><div class="empty-layout" id="emptyLayout"><b>No printable wraps yet</b>Return to the set and add a photo to at least one wrap.</div></div></div>
+      </div>
+      <div class="actions"><button class="btn" id="layoutBack">← Edit set</button><span class="helper">Drag wraps anywhere within the paper edge.</span></div>
+    </article>
+  </section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+'use strict';
+var LENGTH=24;
+var WIDTHS=[16,13.8,12.5,11.5,10.5,8.5];
+var SET_PATTERN=[16,13.8,12.5,12.5,11.5,11.5,10.5,8.5];
+var nextId=1;
+function makeWrap(w){return{id:nextId++,w:w,source:null,sourceUrl:'',scale:1,rotation:0,x:0,y:0,flip:false,layoutX:0,layoutY:0,previewUrl:''}}
+var wraps=[];SET_PATTERN.concat(SET_PATTERN).forEach(function(w){wraps.push(makeWrap(w))});
+var state={screen:'set',selectedId:wraps[0].id,paperSize:'letter',background:'white',printDpi:600,paperScale:1,cutOutline:true};
+var $=function(s){return document.querySelector(s)},$$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))},toastTimer;
+function showToast(t){var e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){e.classList.remove('show')},2300)}
+function selected(){for(var i=0;i<wraps.length;i++)if(wraps[i].id===state.selectedId)return wraps[i];return wraps[0]||null}
+function photoCount(){return wraps.filter(function(w){return !!w.source}).length}
+function fmtW(w){return (Math.round(w*10)/10).toString().replace(/\.0$/,'')}
+function wrapPath(ctx,w,h){ctx.beginPath();ctx.moveTo(w*.5,0);ctx.bezierCurveTo(w*.86,0,w,h*.09,w,h*.3);ctx.lineTo(w,h*.7);ctx.bezierCurveTo(w,h*.91,w*.86,h,w*.5,h);ctx.bezierCurveTo(w*.14,h,0,h*.91,0,h*.7);ctx.lineTo(0,h*.3);ctx.bezierCurveTo(0,h*.09,w*.14,0,w*.5,0);ctx.closePath()}
+function paintWrap(ctx,wr,w,h,stroke){
+  ctx.clearRect(0,0,w,h);
+  ctx.save();wrapPath(ctx,w,h);ctx.clip();
+  if(wr.source){
+    var im=wr.source,iw=im.naturalWidth||im.width,ih=im.naturalHeight||im.height;
+    if(iw&&ih){var base=Math.max(w/iw,h/ih),s=base*wr.scale,dw=iw*s,dh=ih*s;
+      ctx.translate(w/2+wr.x/100*w,h/2+wr.y/100*h);
+      ctx.rotate(wr.rotation*Math.PI/180);
+      if(wr.flip)ctx.scale(-1,1);
+      ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+      ctx.drawImage(im,-dw/2,-dh/2,dw,dh);}
+  } else {
+    ctx.fillStyle='#e9ded4';ctx.fillRect(0,0,w,h);
+  }
+  ctx.restore();
+  if(stroke){ctx.save();wrapPath(ctx,w,h);ctx.strokeStyle='rgba(60,50,45,.5)';ctx.lineWidth=Math.max(1,Math.min(w,h)/60);ctx.stroke();ctx.restore()}
+}
+function wrapCanvas(wr,dpi,stroke){
+  var w=Math.max(2,Math.round(wr.w/25.4*dpi)),h=Math.max(2,Math.round(LENGTH/25.4*dpi));
+  var c=document.createElement('canvas');c.width=w;c.height=h;
+  paintWrap(c.getContext('2d'),wr,w,h,stroke);
+  return c;
+}
+function go(name){
+  state.screen=name;
+  if(name==='set')renderSet();
+  $$('.screen').forEach(function(s){s.classList.toggle('active',s.id===name+'Screen')});
+  var order={set:1,edit:2,layout:3};
+  $$('.step').forEach(function(b){var n=+b.querySelector('span').textContent;b.classList.toggle('active',n===order[name]);b.classList.toggle('done',n<order[name])});
+  if(name==='edit')loadEditor();
+  if(name==='layout')buildLayout(false);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+$$('.step').forEach(function(b){b.addEventListener('click',function(){var t=b.dataset.go;if(t==='edit'&&!selected()){showToast('Add a wrap first');return}go(t)})});
+/* ---------- Step 1: the set ---------- */
+function renderSet(){
+  var grid=$('#wrapGrid');grid.innerHTML='';
+  var pxmm=window.innerWidth<760?3.05:4.3;
+  wraps.forEach(function(wr,i){
+    var b=document.createElement('button');b.type='button';
+    b.className='wrap-tile'+(wr.id===state.selectedId?' selected':'')+(wr.source?'':' empty');
+    b.setAttribute('aria-label','Edit wrap '+(i+1)+', '+fmtW(wr.w)+' by 24 millimeters'+(wr.source?', photo added':', no photo'));
+    var c=wrapCanvas(wr,170,false);
+    c.style.width=(wr.w*pxmm)+'px';c.style.height=(LENGTH*pxmm)+'px';
+    var label=document.createElement('span');label.className='tile-label';label.textContent=fmtW(wr.w)+' mm';
+    var num=document.createElement('span');num.className='tile-num';num.textContent='Wrap '+(i+1);
+    b.appendChild(c);b.appendChild(label);b.appendChild(num);
+    b.addEventListener('click',function(){state.selectedId=wr.id;go('edit')});
+    grid.appendChild(b);
+  });
+  $('#emptySet').classList.toggle('hidden',wraps.length>0);
+  var pc=photoCount();
+  $('#setCount').textContent=wraps.length+' wrap'+(wraps.length===1?'':'s')+' · '+pc+' with photo'+(pc===1?'':'s');
+}
+$('#addWrap').addEventListener('click',function(){var wr=makeWrap(12.5);wraps.push(wr);state.selectedId=wr.id;renderSet();showToast('Wrap added — 12.5 × 24 mm');go('edit')});
+$('#addSet').addEventListener('click',function(){SET_PATTERN.concat(SET_PATTERN).forEach(function(w){wraps.push(makeWrap(w))});renderSet();showToast('Full set of 16 added — '+wraps.length+' wraps total')});
+$('#doneSet').addEventListener('click',function(){go('layout')});
+/* ---------- Step 2: the editor ---------- */
+var sizeGrid=$('#sizeGrid');
+WIDTHS.forEach(function(w){var b=document.createElement('button');b.type='button';b.className='size';b.dataset.width=w;b.innerHTML='<strong>'+fmtW(w)+'</strong><small>mm wide × 24</small>';b.addEventListener('click',function(){var wr=selected();if(!wr)return;wr.w=w;updateEditorLabels();drawPreview()});sizeGrid.appendChild(b)});
+function wrapIndex(wr){return wraps.indexOf(wr)+1}
+function updateEditorLabels(){
+  var wr=selected();if(!wr)return;
+  $('#editTitle').textContent='Wrap '+wrapIndex(wr);
+  $('#editPill').textContent=fmtW(wr.w)+' × 24 mm';
+  $$('.size').forEach(function(b){b.classList.toggle('selected',+b.dataset.width===wr.w)});
+  $('#zoom').value=Math.round(wr.scale*100);
+  $('#zoomOut').textContent=Math.round(wr.scale*100)+'%';
+}
+function drawPreview(){
+  var wr=selected();if(!wr)return;
+  var holder=$('#wrapPreview'),canvas=$('#previewCanvas');
+  var shell=holder.parentElement;
+  var dispH=Math.min(460,Math.max(280,window.innerHeight*.58));
+  var dispW=dispH*wr.w/LENGTH;
+  var maxW=Math.max(120,shell.clientWidth-32);
+  if(dispW>maxW){dispW=maxW;dispH=dispW*LENGTH/wr.w}
+  holder.style.width=dispW+'px';holder.style.height=dispH+'px';
+  var res=14;canvas.width=Math.round(wr.w*res);canvas.height=Math.round(LENGTH*res);
+  canvas.style.width=dispW+'px';canvas.style.height=dispH+'px';
+  paintWrap(canvas.getContext('2d'),wr,canvas.width,canvas.height,true);
+  $('#emptyArt').classList.toggle('hidden',!!wr.source);
+}
+function loadEditor(){updateEditorLabels();drawPreview()}
+function readFile(file,cb){
+  if(!file)return;
+  if(!/^image\//.test(file.type)){showToast('Choose an image file');return}
+  var r=new FileReader();
+  r.onload=function(){var im=new Image();im.onload=function(){cb(im,r.result)};im.onerror=function(){showToast('That photo could not be opened')};im.src=r.result};
+  r.onerror=function(){showToast('That file could not be read')};
+  r.readAsDataURL(file);
+}
+$('#artInput').addEventListener('change',function(){
+  var input=this;
+  readFile(input.files[0],function(im,url){var wr=selected();if(!wr)return;wr.source=im;wr.sourceUrl=url;wr.scale=1;wr.rotation=0;wr.x=0;wr.y=0;wr.flip=false;updateEditorLabels();drawPreview();showToast('Photo fitted to wrap '+wrapIndex(wr))});
+  input.value='';
+});
+$('#zoom').addEventListener('input',function(){var wr=selected();if(!wr)return;wr.scale=+this.value/100;$('#zoomOut').textContent=this.value+'%';drawPreview()});
+function scaleBy(v){var wr=selected();if(!wr)return;wr.scale=Math.max(.5,Math.min(4,wr.scale*v));updateEditorLabels();drawPreview()}
+$('#smaller').addEventListener('click',function(){scaleBy(.9)});
+$('#larger').addEventListener('click',function(){scaleBy(1.1)});
+$('#left').addEventListener('click',function(){var wr=selected();if(wr){wr.rotation-=5;drawPreview()}});
+$('#right').addEventListener('click',function(){var wr=selected();if(wr){wr.rotation+=5;drawPreview()}});
+$('#center').addEventListener('click',function(){var wr=selected();if(wr){wr.x=0;wr.y=0;drawPreview()}});
+$('#reset').addEventListener('click',function(){var wr=selected();if(wr){wr.x=0;wr.y=0;wr.rotation=0;wr.scale=1;wr.flip=false;updateEditorLabels();drawPreview()}});
+$('#flip').addEventListener('click',function(){var wr=selected();if(wr){wr.flip=!wr.flip;drawPreview()}});
+$('#applyAll').addEventListener('click',function(){
+  var wr=selected();if(!wr||!wr.source){showToast('Add a photo to this wrap first');return}
+  wraps.forEach(function(o){if(o!==wr){o.source=wr.source;o.sourceUrl=wr.sourceUrl;o.scale=wr.scale;o.rotation=wr.rotation;o.x=wr.x;o.y=wr.y;o.flip=wr.flip}});
+  showToast('Photo copied to all '+wraps.length+' wraps');
+});
+$('#duplicate').addEventListener('click',function(){
+  var wr=selected();if(!wr)return;
+  var copy=makeWrap(wr.w);copy.source=wr.source;copy.sourceUrl=wr.sourceUrl;copy.scale=wr.scale;copy.rotation=wr.rotation;copy.x=wr.x;copy.y=wr.y;copy.flip=wr.flip;
+  wraps.splice(wraps.indexOf(wr)+1,0,copy);state.selectedId=copy.id;
+  updateEditorLabels();drawPreview();showToast('Wrap duplicated');
+});
+$('#clearPhoto').addEventListener('click',function(){var wr=selected();if(!wr)return;wr.source=null;wr.sourceUrl='';wr.scale=1;wr.rotation=0;wr.x=0;wr.y=0;wr.flip=false;updateEditorLabels();drawPreview();showToast('Photo cleared')});
+$('#removeWrap').addEventListener('click',function(){
+  var wr=selected();if(!wr)return;
+  var idx=wraps.indexOf(wr);wraps.splice(idx,1);
+  if(wraps.length)state.selectedId=wraps[Math.min(idx,wraps.length-1)].id;
+  showToast('Wrap removed — '+wraps.length+' left');
+  go('set');
+});
+$('#backSet').addEventListener('click',function(){go('set')});
+$('#saveWrap').addEventListener('click',function(){var wr=selected();showToast(wr?'Wrap '+wrapIndex(wr)+' updated':'Saved');go('set')});
+/* Gestures on the preview: drag to move, pinch to zoom / twist to rotate */
+var pointers=new Map(),gesture=null,preview=$('#wrapPreview');
+function localPoint(clientX,clientY){var r=preview.getBoundingClientRect();return{x:clientX-r.left,y:clientY-r.top}}
+function angleDelta(now,start){var d=(now-start)*180/Math.PI;while(d>180)d-=360;while(d<-180)d+=360;return d}
+function startGesture(points){var wr=selected();if(!wr)return;if(points.length===1){gesture={type:'drag',start:points[0],x:wr.x,y:wr.y};return}var dx=points[1].x-points[0].x,dy=points[1].y-points[0].y;gesture={type:'pinch',dist:Math.max(1,Math.hypot(dx,dy)),angle:Math.atan2(dy,dx),scale:wr.scale,rotation:wr.rotation,x:wr.x,y:wr.y,cx:(points[0].x+points[1].x)/2,cy:(points[0].y+points[1].y)/2}}
+function moveGesture(points){if(!gesture)return;var wr=selected();if(!wr)return;var r=preview.getBoundingClientRect();if(points.length===1&&gesture.type==='drag'){wr.x=gesture.x+(points[0].x-gesture.start.x)/r.width*100;wr.y=gesture.y+(points[0].y-gesture.start.y)/r.height*100}else if(points.length>=2&&gesture.type==='pinch'){var dx=points[1].x-points[0].x,dy=points[1].y-points[0].y,cx=(points[0].x+points[1].x)/2,cy=(points[0].y+points[1].y)/2;wr.scale=Math.max(.5,Math.min(4,gesture.scale*Math.hypot(dx,dy)/gesture.dist));wr.rotation=gesture.rotation+angleDelta(Math.atan2(dy,dx),gesture.angle);wr.x=gesture.x+(cx-gesture.cx)/r.width*100;wr.y=gesture.y+(cy-gesture.cy)/r.height*100}$('#zoom').value=Math.round(wr.scale*100);$('#zoomOut').textContent=Math.round(wr.scale*100)+'%';drawPreview()}
+preview.addEventListener('pointerdown',function(e){var wr=selected();if(e.pointerType==='touch'||!wr||!wr.source)return;e.preventDefault();preview.setPointerCapture(e.pointerId);pointers.set(e.pointerId,localPoint(e.clientX,e.clientY));startGesture(Array.from(pointers.values()))});
+preview.addEventListener('pointermove',function(e){if(e.pointerType==='touch'||!pointers.has(e.pointerId))return;e.preventDefault();pointers.set(e.pointerId,localPoint(e.clientX,e.clientY));moveGesture(Array.from(pointers.values()))});
+function endPointer(e){if(e.pointerType==='touch')return;pointers.delete(e.pointerId);gesture=null}
+preview.addEventListener('pointerup',endPointer);preview.addEventListener('pointercancel',endPointer);
+function touchPoints(touches){var out=[];for(var i=0;i<touches.length&&i<2;i++)out.push(localPoint(touches[i].clientX,touches[i].clientY));return out}
+preview.addEventListener('touchstart',function(e){var wr=selected();if(!wr||!wr.source)return;e.preventDefault();startGesture(touchPoints(e.touches))},{passive:false});
+preview.addEventListener('touchmove',function(e){var wr=selected();if(!wr||!wr.source)return;e.preventDefault();moveGesture(touchPoints(e.touches))},{passive:false});
+function endTouch(e){var wr=selected();if(!wr||!wr.source)return;e.preventDefault();var points=touchPoints(e.touches);if(points.length)startGesture(points);else gesture=null}
+preview.addEventListener('touchend',endTouch,{passive:false});preview.addEventListener('touchcancel',endTouch,{passive:false});
+preview.addEventListener('gesturestart',function(e){e.preventDefault()},{passive:false});
+preview.addEventListener('gesturechange',function(e){e.preventDefault()},{passive:false});
+/* ---------- Step 3: print layout ---------- */
+$('#layoutBack').addEventListener('click',function(){go('set')});
+function paperDims(dpi){dpi=dpi||300;return state.paperSize==='a4'?{w:210,h:297,pxW:Math.round(210/25.4*dpi),pxH:Math.round(297/25.4*dpi)}:{w:215.9,h:279.4,pxW:Math.round(8.5*dpi),pxH:Math.round(11*dpi)}}
+function printable(){return wraps.filter(function(w){return !!w.source})}
+function pack(){
+  var x=10,y=10,gap=3,inRow=0,d=paperDims();
+  printable().forEach(function(wr){
+    if(inRow>=8||x+wr.w>d.w-10){x=10;y+=LENGTH+gap;inRow=0}
+    wr.layoutX=x;wr.layoutY=y;x+=wr.w+gap;inRow++;
+  });
+}
+function buildLayout(keep){
+  var list=printable();
+  $('#layoutCount').textContent=list.length+' of '+wraps.length+' wraps print';
+  if(!keep)pack();
+  var paper=$('#paper'),wrap=paper.parentElement,d=paperDims();
+  var maxW=Math.max(250,Math.min(620,wrap.clientWidth-20)),maxH=Math.max(390,Math.min(720,window.innerHeight*.72));
+  var scale=Math.min(maxW/d.w,maxH/d.h);state.paperScale=scale;
+  paper.style.width=(d.w*scale)+'px';paper.style.height=(d.h*scale)+'px';
+  paper.querySelectorAll('.sheet-item').forEach(function(i){i.remove()});
+  $('#emptyLayout').classList.toggle('hidden',list.length>0);
+  list.forEach(function(wr){
+    wr.previewUrl=wrapCanvas(wr,300,state.cutOutline).toDataURL('image/png');
+    var item=document.createElement('div');item.className='sheet-item';item.dataset.wrap=wr.id;
+    item.style.left=(wr.layoutX*scale)+'px';item.style.top=(wr.layoutY*scale)+'px';
+    item.style.width=(wr.w*scale)+'px';item.style.height=(LENGTH*scale)+'px';
+    item.innerHTML='<img draggable="false" alt="Wrap '+wrapIndex(wr)+', '+fmtW(wr.w)+' by 24 millimeters" src="'+wr.previewUrl+'">';
+    makeDraggable(item,wr);paper.appendChild(item);
+  });
+}
+function makeDraggable(el,wr){
+  var drag=null;
+  function finishDrag(e){if(!drag||e.pointerId!==drag.id)return;el.style.left=(wr.layoutX*state.paperScale)+'px';el.style.top=(wr.layoutY*state.paperScale)+'px';el.style.transform='';el.classList.remove('dragging');drag=null}
+  el.addEventListener('pointerdown',function(e){e.preventDefault();el.setPointerCapture(e.pointerId);drag={id:e.pointerId,x:e.clientX,y:e.clientY,l:wr.layoutX,t:wr.layoutY};el.classList.add('dragging')});
+  el.addEventListener('pointermove',function(e){if(!drag||e.pointerId!==drag.id)return;e.preventDefault();var d=paperDims();wr.layoutX=Math.max(0,Math.min(d.w-wr.w,drag.l+(e.clientX-drag.x)/state.paperScale));wr.layoutY=Math.max(0,Math.min(d.h-LENGTH,drag.t+(e.clientY-drag.y)/state.paperScale));el.style.transform='translate3d('+((wr.layoutX-drag.l)*state.paperScale)+'px,'+((wr.layoutY-drag.t)*state.paperScale)+'px,0)'});
+  el.addEventListener('pointerup',finishDrag);el.addEventListener('pointercancel',finishDrag);el.addEventListener('lostpointercapture',finishDrag);
+}
+$$('[data-paper-size]').forEach(function(b){b.addEventListener('click',function(){state.paperSize=b.dataset.paperSize;$$('[data-paper-size]').forEach(function(x){x.classList.toggle('active',x===b)});buildLayout(false)})});
+$$('[data-background]').forEach(function(b){b.addEventListener('click',function(){state.background=b.dataset.background;$$('[data-background]').forEach(function(x){x.classList.toggle('active',x===b)})})});
+$$('[data-print-dpi]').forEach(function(b){b.addEventListener('click',function(){state.printDpi=+b.dataset.printDpi;$$('[data-print-dpi]').forEach(function(x){x.classList.toggle('active',x===b)});$('#resolutionSpec').textContent=state.printDpi+' DPI';$('#downloadSheet').textContent=state.printDpi===600?'Download extra-crisp PNG':'Download 300 DPI PNG';$('#status').textContent=state.printDpi===600?'Extra-crisp export uses four times the print pixels.':''})});
+$('#cutOutline').addEventListener('click',function(){state.cutOutline=!state.cutOutline;this.setAttribute('aria-pressed',String(state.cutOutline));this.querySelector('.toggle-state').textContent=state.cutOutline?'On':'Off';buildLayout(true)});
+$('#repack').addEventListener('click',function(){buildLayout(false);showToast('Wraps repacked in set order')});
+window.addEventListener('resize',function(){if(state.screen==='layout')buildLayout(true);if(state.screen==='edit')drawPreview();if(state.screen==='set')renderSet()});
+function crc32(bytes){var table=crc32.table;if(!table){table=[];for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=(c&1)?0xedb88320^(c>>>1):c>>>1;table[n]=c>>>0}crc32.table=table}var crc=0xffffffff;for(var i=0;i<bytes.length;i++)crc=table[(crc^bytes[i])&255]^(crc>>>8);return(crc^0xffffffff)>>>0}
+function withDpi(blob,dpi,cb){var fr=new FileReader();fr.onload=function(){var src=new Uint8Array(fr.result),data=new Uint8Array(9),dv=new DataView(data.buffer),pixelsPerMeter=Math.round(dpi/0.0254);dv.setUint32(0,pixelsPerMeter);dv.setUint32(4,pixelsPerMeter);data[8]=1;var type=new TextEncoder().encode('pHYs'),crcInput=new Uint8Array(13);crcInput.set(type);crcInput.set(data,4);var chunk=new Uint8Array(21),cdv=new DataView(chunk.buffer);cdv.setUint32(0,9);chunk.set(type,4);chunk.set(data,8);cdv.setUint32(17,crc32(crcInput));var out=new Uint8Array(src.length+21);out.set(src.slice(0,33));out.set(chunk,33);out.set(src.slice(33),54);cb(new Blob([out],{type:'image/png'}))};fr.readAsArrayBuffer(blob)}
+function downloadBlob(blob,name){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500)}
+function exportSheet(dpi,allowFallback){
+  var list=printable(),button=$('#downloadSheet');
+  if(!list.length){showToast('Add a photo to at least one wrap');return}
+  var d=paperDims(dpi),sheet=document.createElement('canvas');
+  try{sheet.width=d.pxW;sheet.height=d.pxH}catch(err){if(allowFallback){showToast('Using 300 DPI for this device');exportSheet(300,false)}else{$('#status').textContent='This device could not create the print file.'}return}
+  var ctx=sheet.getContext('2d');
+  if(!ctx){if(allowFallback){showToast('Using 300 DPI for this device');exportSheet(300,false)}else $('#status').textContent='This device could not create the print file.';return}
+  button.disabled=true;$('#status').textContent='Building '+dpi+' DPI print file…';
+  ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+  if(state.background==='white'){ctx.fillStyle='#fff';ctx.fillRect(0,0,sheet.width,sheet.height)}else ctx.clearRect(0,0,sheet.width,sheet.height);
+  list.forEach(function(wr){var c=wrapCanvas(wr,dpi,state.cutOutline);ctx.drawImage(c,Math.round(wr.layoutX/25.4*dpi),Math.round(wr.layoutY/25.4*dpi))});
+  sheet.toBlob(function(b){
+    if(!b){button.disabled=false;sheet.width=sheet.height=1;if(allowFallback){showToast('Using 300 DPI for this device');exportSheet(300,false)}else $('#status').textContent='This device could not create the print file.';return}
+    sheet.width=sheet.height=1;
+    withDpi(b,dpi,function(out){downloadBlob(out,'nail-wraps-'+state.paperSize+'-'+dpi+'dpi.png');button.disabled=false;$('#status').textContent=dpi+' DPI sheet downloaded — print at 100%';showToast(dpi+' DPI print sheet downloaded')});
+  },'image/png');
+}
+$('#downloadSheet').addEventListener('click',function(){exportSheet(state.printDpi,state.printDpi>300)});
+renderSet();
+})();
+</script>
+</body>
+</html>
